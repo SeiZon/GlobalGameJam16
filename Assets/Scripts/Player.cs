@@ -7,12 +7,11 @@ public class Player : MonoBehaviour {
 	Camera mainCamera;
 
 	public CameraController cameraController;
-	public GameObject activeObject;
+	private GameObject activeObject;
 
 	private float defaultForce = 100f;
 	private float forceCounter = 100f;
 	private float maximumForce = 5000f;
-
 
 	void Start () {
 		mainCamera = Camera.main;
@@ -74,11 +73,9 @@ public class Player : MonoBehaviour {
 
 		foreach(RaycastHit hit in hits) {
 			GameObject go = hit.collider.gameObject;
-			//			Debug.Log("HIT SOMETHING?:\n "+ go);
 
 			// Only add if throwable for now
 			if(go.tag == "Throwable" && hit.distance < closestDistance) {
-				Debug.Log("Aww yiss");
 				closestObject = go;
 				closestDistance = hit.distance;
 			}
