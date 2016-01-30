@@ -1,10 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
     public class EventData
     {
-        public static Dictionary<WeddingEventType, bool> eventsRunning = new Dictionary<WeddingEventType, bool>()
+
+        public static EventData Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new EventData();
+                    return instance;
+                }
+                else return instance;
+            } 
+            
+        }
+
+        private static EventData instance;
+
+        public Dictionary<WeddingEventType, bool> eventsRunning = new Dictionary<WeddingEventType, bool>()
         {
             { WeddingEventType.Toastmaster, false },
             { WeddingEventType.Brudgom, false },
@@ -16,7 +35,7 @@ namespace Assets.Scripts
 
         };
 
-        public static Dictionary<InterruptAction, WeddingEventType> interruptActions = new Dictionary<InterruptAction, WeddingEventType>()
+        public Dictionary<InterruptAction, WeddingEventType> interruptActions = new Dictionary<InterruptAction, WeddingEventType>()
         {
             {InterruptAction.Uninterruptable, WeddingEventType.Toastmaster},
             {InterruptAction.Waiter, WeddingEventType.Brudgom},
@@ -28,14 +47,7 @@ namespace Assets.Scripts
 
         };
 
-        public static Dictionary<int, WeddingEventType> eventTiming = new Dictionary<int, WeddingEventType>()
-        {
-            {eventTimers[0], WeddingEventType.Toastmaster },
-            {eventTimers[1], WeddingEventType.Brudgom },
-            {eventTimers[2], WeddingEventType.Svigerfar },
-            {eventTimers[3], WeddingEventType.Bestman }
-
-        };
+        public Dictionary<int, WeddingEventType> eventTiming;
 
         public enum WeddingEventType
         {
@@ -59,17 +71,28 @@ namespace Assets.Scripts
             Røgalarm
         }
 
-        public static int[] eventTimers =
+        public EventData() {
+            eventTiming = new Dictionary<int, WeddingEventType>()
+            {
+                {eventTimers[0], WeddingEventType.Toastmaster },
+                {eventTimers[1], WeddingEventType.Brudgom },
+                {eventTimers[2], WeddingEventType.Svigerfar },
+                {eventTimers[3], WeddingEventType.Bestman }
+            };
+        }
+
+
+        public int[] eventTimers =
         {
-            0, 60, 120, 180
+            0, 10, 120, 180
         };
 
-        public static int GetEventTimer(WeddingEventType type)
+        public int GetEventTimer(WeddingEventType type)
         {
             return eventTimers[(int)type];
         }
 
-        public static void InterruptEvent(InterruptAction interruptActionDone)
+        public void InterruptEvent(InterruptAction interruptActionDone)
         {
 
             if (eventsRunning[interruptActions[interruptActionDone]])

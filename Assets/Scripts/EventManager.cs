@@ -5,6 +5,8 @@ namespace Assets.Scripts
 {
     public class EventManager : MonoBehaviour
     {
+
+
         public delegate void EventToastmasterStart();
         public event EventToastmasterStart OnEventToastmasterStart;
         public delegate void EventToastmasterInterrupt();
@@ -25,46 +27,63 @@ namespace Assets.Scripts
         public delegate void EventBrudgomInterrupt();
         public event EventBrudgomInterrupt OnEventBrudgomInterrupt;
 
-        private Dictionary<EventData.WeddingEventType, WeddingEvent> events;
+        private Dictionary<EventData.WeddingEventType, WeddingEvent> events = new Dictionary<EventData.WeddingEventType, WeddingEvent>();
 
 
         [HideInInspector]
         public float timeCounter;
-    
-        void Start()
-        {
-            timeCounter = 0;
-            events = new Dictionary<EventData.WeddingEventType, WeddingEvent>();
-        }
 
-        void Update()
-        {
+        EventData eventData = EventData.Instance;
+
+        void Update() {
             timeCounter += Time.deltaTime;
 
-            foreach (int i in EventData.eventTimers)
+            foreach (int i in eventData.eventTimers)
             {
                 if (i < timeCounter)
                 {
-                    EventData.WeddingEventType currentWeddingEventType = EventData.eventTiming[i];
+                    EventData.WeddingEventType currentWeddingEventType = eventData.eventTiming[i];
+
                     if (events[currentWeddingEventType].hasBeenActivated)
                     {
                         continue;
-
                     }
                     else
                     {
-                        events[currentWeddingEventType].Activate();
+                        if (events[currentWeddingEventType].eventType == EventData.WeddingEventType.Brudgom)
+                        {
+                            OnEventBrudgomStart();
+                        }
+                        //events[currentWeddingEventType].Activate();
                     }
                 }
             }
+            /*
+            if (Input.GetKeyUp(KeyCode.A))
+            {
+                OnEventBestmanInterrupt();
+            }
+            if (Input.GetKeyUp(KeyCode.S))
+            {
+                OnEventBrudgomInterrupt();
+            }
+            if (Input.GetKeyUp(KeyCode.D))
+            {
+                OnEventSvigerfarInterrupt();
+            }
+            if (Input.GetKeyUp(KeyCode.F))
+            {
+                OnEventToastmasterInterrupt();
+            }
+            */
         }
 
         public void InterruptEvent(EventData.InterruptAction interruptAction)
         {
-            if (EventData.eventsRunning[EventData.interruptActions[interruptAction]])
+            if (eventData.eventsRunning[eventData.interruptActions[interruptAction]])
             {
-                events[EventData.interruptActions[interruptAction]].Interrupt();
-                EventData.InterruptEvent(interruptAction);
+                events[eventData.interruptActions[interruptAction]].Interrupt();
+                eventData.InterruptEvent(interruptAction);
             }
         }
 
@@ -73,5 +92,11 @@ namespace Assets.Scripts
             //Hook op til ting her
         }
 
+        public void SubscribeEvent(WeddingEvent weddingEvent)
+        {
+            events.Add(weddingEvent.eventType, weddingEvent);
+        }
+
+        
     }
 }

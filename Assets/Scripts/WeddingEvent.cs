@@ -12,7 +12,7 @@ namespace Assets.Scripts
 
         public virtual void Activate()
         {
-            if (!hasBeenActivated || isRunning) return;
+            if (hasBeenActivated || isRunning) return;
             else hasBeenActivated = true;
             isRunning = true;
             //Freeze controls 
@@ -24,5 +24,6 @@ namespace Assets.Scripts
             isRunning = false;
             //Stop talking and play interrupt sound ("Øhh... Skål!")
         }
+        
     }
 }
