@@ -24,7 +24,7 @@ public class CameraController {
 	public void InitCursor() {
 		Cursor.lockState = CursorLockMode.Locked;
 		cursorHotspot = new Vector2 (cursorTexture.width / 2, cursorTexture.height / 2);
-		Cursor.SetCursor(cursorTexture, cursorHotspot, CursorMode.Auto);
+		Cursor.SetCursor(cursorTexture, cursorHotspot, CursorMode.ForceSoftware);
 	}
 
 	public void RotateCamera(Transform player, Transform camera)
