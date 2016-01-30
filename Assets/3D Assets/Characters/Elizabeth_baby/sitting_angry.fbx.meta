@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 2ca2b8d7d0df43e48ba5bfee09baa72c
-timeCreated: 1454194157
+guid: 6ebe03e14dafb584fb2c44fb8b2438ed
+timeCreated: 1454194376
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -149,11 +149,17 @@ ModelImporter:
     resampleRotations: 1
     optimizeGameObjects: 0
     motionNodeName: 
-    animationImportErrors: 
+    animationImportErrors: '
+
+      Imported file ''sitting_angry'' conversion failed: Required human bone ''Hips''
+      not found
+
+
+'
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -183,10 +189,20 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 3
   importAnimation: 1
-  copyAvatar: 0
+  copyAvatar: 1
   humanDescription:
     human: []
-    skeleton: []
+    skeleton:
+    - name: Elizabeth_baby(Clone)
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+      transformModified: 1
+    - name: default
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+      transformModified: 1
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -196,7 +212,8 @@ ModelImporter:
     feetSpacing: 0
     rootMotionBoneName: 
     hasTranslationDoF: 0
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 307485009bd27934eb2e0721d5d15cf6,
+    type: 3}
   animationType: 2
   humanoidOversampling: 1
   additionalBone: 0

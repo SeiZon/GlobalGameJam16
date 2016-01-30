@@ -8,6 +8,7 @@ public class FillableGlass : MonoBehaviour
 	public float contents = 0.6f;
 	public GameObject contentObject;
 	public float fillAmount = 1f;
+    public bool isEmpty = false;
 
 	public void Fill() {
 		var oldContents = contents;
@@ -20,6 +21,7 @@ public class FillableGlass : MonoBehaviour
 		var delta = contents - oldContents;
 		Debug.Log("fillAmount, delta: " + fillAmount + ", " + delta);
 		contentObject.transform.Translate(new Vector3(0, delta, 0));
+	    isEmpty = false;
 	}
 
 
@@ -29,6 +31,7 @@ public class FillableGlass : MonoBehaviour
 
 		if(contents - amount <= minContents) {
 			contents = minContents;
+		    isEmpty = true;
 		} else {
 			contents -= amount;
 		}

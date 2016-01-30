@@ -9,6 +9,9 @@ namespace Assets.Scripts
         private float maxSipTime = 25;
         private float minSipTime = 5;
         private float sipTimer = 0;
+        [SerializeField] private float minDrinkAmount = 5;
+        [SerializeField] private float maxDrinkAmount = 70;
+        private FillableGlass fillableGlass;
 
         protected override void Start()
         {
@@ -17,23 +20,33 @@ namespace Assets.Scripts
             eventManager.SubscribeEvent(this);
             sideObjective = true;
             sipTimer = Random.Range(minSipTime, maxSipTime);
+            fillableGlass = GameObject.FindGameObjectWithTag("Fillable").GetComponent<FillableGlass>();
+            noDrinkTimer = noDrinkTime;
         }
 
         void Update()
         {
             if (isRunning)
             {
-
-                //is drink not empty?
-                sipTimer -= Time.deltaTime;
-                if (sipTimer <= 0)
+                if (!fillableGlass.isEmpty)
                 {
-                    SipDrink();
+                    sipTimer -= Time.deltaTime;
+                    if (sipTimer <= 0)
+                    {
+                        SipDrink();
+                        sipTimer = Random.Range(minSipTime, maxSipTime);
+                    }
                 }
-
-                //else if drink is empty
-                //Count down timer
-                //If timer reaches zero, run event
+                else
+                {
+                    noDrinkTimer -= Time.deltaTime;
+                    if (noDrinkTimer <= 0)
+                    {
+                        eventManager.PlayEvent(eventType);
+                        noDrinkTimer = noDrinkTime;
+                        isRunning = false;
+                    }
+                }
             }
         }
 
@@ -51,7 +64,7 @@ namespace Assets.Scripts
 
         private void SipDrink()
         {
-            //Take a drink
+            fillableGlass.Empty((Random.Range(minDrinkAmount, maxDrinkAmount)/100) * 1.2f);
         }
     }
 }
