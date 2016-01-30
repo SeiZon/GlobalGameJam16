@@ -26,9 +26,8 @@ namespace Assets.Scripts
 
         void Update()
         {
-            if (true)
+            if (isRunning)
             {
-                Debug.Log(sipTimer);
                 if (!fillableGlass.isEmpty)
                 {
                     sipTimer -= Time.deltaTime;

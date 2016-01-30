@@ -11,6 +11,10 @@ namespace Assets.Scripts
         private float playTimer = 0;
         private float silenceTimer = 0;
 
+        [SerializeField] private ParticleSystem particles;
+        [SerializeField] private Animator animator;
+
+
         protected override void Start() {
             base.Start();
             eventType = EventData.WeddingEventType.Music;
@@ -23,6 +27,8 @@ namespace Assets.Scripts
         void Update() {
             if (isRunning)
             {
+                particles.gameObject.SetActive(true);
+                animator.enabled = true;
                 playTimer -= Time.deltaTime;
                 if (playTimer <= 0)
                 {
@@ -32,6 +38,8 @@ namespace Assets.Scripts
             }
             else
             {
+                particles.gameObject.SetActive(false);
+                animator.enabled = false;
                 silenceTimer -= Time.deltaTime;
                 if (silenceTimer <= 0) {
                     isRunning = false;
