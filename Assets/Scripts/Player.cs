@@ -20,20 +20,32 @@ public class Player : MonoBehaviour {
 
 		// If Right mouse button
 		if(Input.GetMouseButtonDown(1)) {
-			activeObject = GetFocusedObject();
+			if (!activeObject) {
+				activeObject = GetFocusedObject();
 
-			//TODO: Do something about grasping and centering the object on screen.
-
-			if(activeObject != null) {
-				Debug.Log("HAS OBJECT: " + activeObject);
-			} else {
-				Debug.Log("No cigar");
+				if(activeObject != null) {
+					Debug.Log("HAS OBJECT: " + activeObject);
+				} else {
+					Debug.Log("No cigar");
+				}
+			}
+			else {
+				activeObject = null;
 			}
 		}
+
 		if(Input.GetMouseButtonDown(0)) {
 			if(activeObject) {
 				FireObject(activeObject);
 			}
+		}
+
+		HoldObject();
+	}
+
+	public void HoldObject() {
+		if(activeObject != null) {
+			activeObject.transform.position = cameraController.GetCenterRay().GetPoint(5f);
 		}
 	}
 
