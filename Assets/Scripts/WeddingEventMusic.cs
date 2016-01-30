@@ -4,13 +4,12 @@ namespace Assets.Scripts
 {
     public class WeddingEventMusic : WeddingEvent
     {
-        private EventManager eventManager;
-
         void Start()
         {
             eventType = EventData.WeddingEventType.Music;
             eventManager = GameObject.FindGameObjectWithTag("EventManager").GetComponent<EventManager>();
             eventManager.SubscribeEvent(this);
+            sideObjective = true;
         }
 
 

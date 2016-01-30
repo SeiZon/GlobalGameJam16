@@ -4,8 +4,6 @@ namespace Assets.Scripts
 {
     public class WeddingEventBrudgom : WeddingEvent
     {
-        private EventManager eventManager;
-
         void Start()
         {
             eventType = EventData.WeddingEventType.Brudgom;

@@ -4,7 +4,6 @@ namespace Assets.Scripts
 {
     public class WeddingEventBestman : WeddingEvent
     {
-        private EventManager eventManager;
 
         void Start()
         {

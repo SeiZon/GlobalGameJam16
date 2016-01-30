@@ -6,15 +6,24 @@ namespace Assets.Scripts
     {
         public bool hasBeenActivated;
         public bool isRunning;
+        public bool sideObjective;
+        protected EventManager eventManager;
         [SerializeField] private AudioClip[] speechAudio;
         [SerializeField] private AudioClip[] interruptAudio;
         public EventData.WeddingEventType eventType;
 
+        protected virtual void Start()
+        {
+            eventManager = GameObject.FindGameObjectWithTag("EventManager").GetComponent<EventManager>();
+        }
+
         public virtual void Activate()
         {
-            if (hasBeenActivated || isRunning) return;
+            if ((hasBeenActivated || isRunning) && !sideObjective) return;
+            if (eventManager.eventCurrentlyPlaying) return;
             else hasBeenActivated = true;
             isRunning = true;
+
             //Freeze controls 
             //Begin playing speech sound
         }

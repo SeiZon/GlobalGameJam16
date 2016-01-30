@@ -33,10 +33,17 @@ namespace Assets.Scripts
         [HideInInspector]
         public float timeCounter;
 
+        public bool eventCurrentlyPlaying = false;
+
         EventData eventData = EventData.Instance;
 
         void Update() {
             timeCounter += Time.deltaTime;
+
+            foreach (KeyValuePair<EventData.WeddingEventType, bool> pair in eventData.eventsRunning)
+            {
+                eventCurrentlyPlaying = pair.Value;
+            }
 
             foreach (int i in eventData.eventTimers)
             {
