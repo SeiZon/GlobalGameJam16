@@ -11,7 +11,7 @@ public class Player : MonoBehaviour {
 
 	private float defaultForce = 100f;
 	private float forceCounter = 100f;
-	private float maximumForce = 5000f;
+	private float maximumForce = 4000f;
 
 	void Start () {
 		mainCamera = Camera.main;
@@ -66,7 +66,7 @@ public class Player : MonoBehaviour {
 
 	public void HoldObject() {
 		if(activeObject != null && activeObject.tag == "Throwable") {
-			activeObject.transform.position = cameraController.GetCenterRay().GetPoint(5f);
+			activeObject.transform.position = cameraController.GetCenterRay().GetPoint(2.5f);
 		}
 	}
 
@@ -74,7 +74,7 @@ public class Player : MonoBehaviour {
 		Ray centerRay = cameraController.GetCenterRay();
 		var rb = objectToFire.GetComponent<Rigidbody>();
 
-		rb.AddForce(centerRay.direction * forceMultiplier);
+		rb.AddRelativeForce(centerRay.direction * forceMultiplier);
 		activeObject = null;
 	}
 

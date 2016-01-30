@@ -10,6 +10,13 @@ public class FillableGlass : MonoBehaviour
 	public float fillAmount = 1f;
     public bool isEmpty = false;
 
+	public void Start() {
+		maxContents = contentObject.transform.position.y;
+		minContents = -maxContents;
+		Debug.Log("Height: " + maxContents);
+		Debug.Log("Min: " + minContents);
+	}
+
 	public void Fill() {
 		var oldContents = contents;
 
