@@ -25,6 +25,7 @@ public class Player : MonoBehaviour {
 		if(Input.GetMouseButtonDown(1)) {
 			if (!activeObject) {
 				activeObject = GetFocusedObject();
+				InteractWithObject(activeObject);
 			}
 			else {
 				activeObject = null;
@@ -39,17 +40,39 @@ public class Player : MonoBehaviour {
 		}
 
 		if(Input.GetMouseButtonUp(0)) {
-			if(activeObject) {
+			if(activeObject && activeObject.tag == "Throwable") {
 				FireObject(activeObject, forceCounter);
 				forceCounter = defaultForce;
+			}
+		}
+
+		if(Input.GetKeyDown("e")) {
+			if(activeObject && activeObject.tag == "Fillable") {
+				var fillable = activeObject.GetComponent<FillableGlass>();
+				fillable.Empty(10f);
 			}
 		}
 
 		HoldObject();
 	}
 
+	public void InteractWithObject(GameObject gameObject) {
+		if(gameObject) {
+			switch (gameObject.tag) {
+			case "Fillable":
+				var fillable = gameObject.GetComponent<FillableGlass>();
+				fillable.Fill();
+				// No further actions on this, so no need to keep it active
+				activeObject = null;
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
 	public void HoldObject() {
-		if(activeObject != null) {
+		if(activeObject != null && activeObject.tag == "Throwable") {
 			activeObject.transform.position = cameraController.GetCenterRay().GetPoint(5f);
 		}
 	}
@@ -74,10 +97,16 @@ public class Player : MonoBehaviour {
 		foreach(RaycastHit hit in hits) {
 			GameObject go = hit.collider.gameObject;
 
-			// Only add if throwable for now
-			if(go.tag == "Throwable" && hit.distance < closestDistance) {
-				closestObject = go;
-				closestDistance = hit.distance;
+			if(hit.distance < closestDistance) {
+				switch(go.tag) {
+				case "Throwable":
+				case "Fillable":
+					closestObject = go;
+					closestDistance = hit.distance;
+					break;
+				default:
+					break;
+				}
 			}
 		}
 
