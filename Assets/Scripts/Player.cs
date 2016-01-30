@@ -46,13 +46,6 @@ public class Player : MonoBehaviour {
 			}
 		}
 
-		if(Input.GetKeyDown("e")) {
-			if(activeObject && activeObject.tag == "Fillable") {
-				var fillable = activeObject.GetComponent<FillableGlass>();
-				fillable.Empty(10f);
-			}
-		}
-
 		HoldObject();
 	}
 

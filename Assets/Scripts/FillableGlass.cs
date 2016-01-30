@@ -7,9 +7,9 @@ public class FillableGlass : MonoBehaviour
 
 	public float contents = 0.6f;
 	public GameObject contentObject;
+	public float fillAmount = 1f;
 
 	public void Fill() {
-		float fillAmount = 1f;
 		var oldContents = contents;
 
 		if(contents + fillAmount >= maxContents) {
