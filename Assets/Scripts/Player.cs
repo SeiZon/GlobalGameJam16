@@ -9,6 +9,10 @@ public class Player : MonoBehaviour {
 	public CameraController cameraController;
 	public GameObject activeObject;
 
+	private float defaultForce = 100f;
+	private float forceCounter = 100f;
+	private float maximumForce = 5000f;
+
 
 	void Start () {
 		mainCamera = Camera.main;
@@ -22,21 +26,23 @@ public class Player : MonoBehaviour {
 		if(Input.GetMouseButtonDown(1)) {
 			if (!activeObject) {
 				activeObject = GetFocusedObject();
-
-				if(activeObject != null) {
-					Debug.Log("HAS OBJECT: " + activeObject);
-				} else {
-					Debug.Log("No cigar");
-				}
 			}
 			else {
 				activeObject = null;
 			}
 		}
-
-		if(Input.GetMouseButtonDown(0)) {
+		if(Input.GetMouseButton(0)) {
 			if(activeObject) {
-				FireObject(activeObject);
+				if(forceCounter < maximumForce) {
+					forceCounter += 100f;
+				}
+			}
+		}
+
+		if(Input.GetMouseButtonUp(0)) {
+			if(activeObject) {
+				FireObject(activeObject, forceCounter);
+				forceCounter = defaultForce;
 			}
 		}
 
@@ -49,11 +55,12 @@ public class Player : MonoBehaviour {
 		}
 	}
 
-	public void FireObject(GameObject objectToFire) {
+	public void FireObject(GameObject objectToFire, float forceMultiplier) {
 		Ray centerRay = cameraController.GetCenterRay();
 		var rb = objectToFire.GetComponent<Rigidbody>();
 
-		rb.AddForce(centerRay.direction);
+		rb.AddForce(centerRay.direction * forceMultiplier);
+		activeObject = null;
 	}
 
 	public GameObject GetFocusedObject() {
