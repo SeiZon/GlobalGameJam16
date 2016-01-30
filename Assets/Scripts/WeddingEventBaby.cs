@@ -20,6 +20,7 @@ namespace Assets.Scripts
             eventManager = GameObject.FindGameObjectWithTag("EventManager").GetComponent<EventManager>();
             eventManager.SubscribeEvent(this);
             sideObjective = true;
+            audioSource = GetComponent<AudioSource>();
         }
 
         void Update()
@@ -39,6 +40,16 @@ namespace Assets.Scripts
                 if (cryTimer <= 0)
                 {
                     audioSource.Stop();
+                    silenceTimer = silenceTime;
+                }
+            }
+            else
+            {
+                silenceTimer -= Time.deltaTime;
+                if (silenceTimer <= 0)
+                {
+                    isRunning = false;
+                    eventManager.PlayEvent(eventType);
                 }
             }
         }
