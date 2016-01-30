@@ -20,6 +20,6 @@ public class TableAddGravity : MonoBehaviour {
     void OnTriggerEnter() {
 
         if (tag == "Player")
-            Debug.Log("hejt");
+            Debug.Log("Hej");
     }
 }
