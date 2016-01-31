@@ -67,5 +67,15 @@ namespace Assets.Scripts
         {
             base.Interrupt();
         }
+
+        void OnCollisionEnter(Collision col)
+        {
+            if (col.other.gameObject.tag == "Throwable")
+            {
+                Activate();
+                Debug.Log("BABYHIT");
+            }
+
+        }
     }
 }

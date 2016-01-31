@@ -6,7 +6,7 @@ namespace Assets.Scripts
     public class EventManager : MonoBehaviour
     {
         [SerializeField] private float speechInterval = 30;
-        [SerializeField] private OurClock.Clock clock;
+        //[SerializeField] private OurClock.Clock clock;
 
         public delegate void EventToastmasterStart();
         public event EventToastmasterStart OnEventToastmasterStart;
@@ -83,7 +83,7 @@ namespace Assets.Scripts
         public void PlayEvent(EventData.WeddingEventType eventType)
         {
             //Hook op til ting her
-            clock.clockSpeed = 0;
+            //clock.clockSpeed = 0;
         }
 
         public void SubscribeEvent(WeddingEvent weddingEvent)
