@@ -5,7 +5,7 @@ namespace Assets.Scripts
 {
     public class EventManager : MonoBehaviour
     {
-        [SerializeField] private float speechInterval = 90;
+        [SerializeField] private float speechInterval = 120;
         [SerializeField] private OurClock.Clock clock;
 
         public delegate void EventToastmasterStart();
@@ -67,6 +67,7 @@ namespace Assets.Scripts
                 if (events[currentlyRunningEvent].eventType == EventData.WeddingEventType.Svigerfar) {
                     OnEventSvigerfarStart();
                 }
+                eventData.availableMainEvents.Remove(currentlyRunningEvent);
                 timeCounter = speechInterval;
             }
 
@@ -83,8 +84,7 @@ namespace Assets.Scripts
 
         public void PlayEvent(EventData.WeddingEventType eventType)
         {
-            //Hook op til ting her
-            clock.clockSpeed = 0;
+            //Hook op til ting her  
         }
 
         public void SubscribeEvent(WeddingEvent weddingEvent)
