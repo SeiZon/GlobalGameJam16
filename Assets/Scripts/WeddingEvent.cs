@@ -7,6 +7,7 @@ namespace Assets.Scripts
         public bool hasBeenActivated;
         public bool isRunning;
         public bool sideObjective;
+        private Player player;
         protected EventManager eventManager;
         [SerializeField] private AudioClip[] speechAudio;
         [SerializeField] private AudioClip[] interruptAudio;
@@ -15,6 +16,7 @@ namespace Assets.Scripts
         protected virtual void Start()
         {
             eventManager = GameObject.FindGameObjectWithTag("EventManager").GetComponent<EventManager>();
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         }
 
         protected virtual void Update()
