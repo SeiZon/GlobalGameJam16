@@ -76,7 +76,6 @@ namespace Assets.Scripts
 
         public override void Interrupt()
         {
-            base.Interrupt();
             audioSource.Pause();
             isTalking = false;
         }
