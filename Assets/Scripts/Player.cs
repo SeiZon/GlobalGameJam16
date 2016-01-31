@@ -66,6 +66,12 @@ public class Player : MonoBehaviour {
 		var forceVector = direction * 2000f;
 		Debug.DrawRay(mainCamera.transform.position, forceVector, Color.blue, 10f);
 		rb.AddForce(forceVector, ForceMode.Force);
+
+		var soundScript = activeObject.GetComponent<CollisionSound>();
+		if(soundScript) {
+			soundScript.enabled = true;
+		}
+
 		activeObject = null;
 	}
 
