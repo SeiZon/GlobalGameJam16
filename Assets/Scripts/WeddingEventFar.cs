@@ -9,6 +9,13 @@ namespace Assets.Scripts
         private float maxSipTime = 25;
         private float minSipTime = 5;
         private float sipTimer = 0;
+        [SerializeField] private float minDrinkAmount = 5;
+        [SerializeField] private float maxDrinkAmount = 70;
+        private FillableGlass fillableGlass;
+        [SerializeField] private Transform player;
+        private Quaternion orgRotation;
+        private bool isTalking = false;
+        private AudioSource audioSource;
 
         protected override void Start()
         {
@@ -17,24 +24,47 @@ namespace Assets.Scripts
             eventManager.SubscribeEvent(this);
             sideObjective = true;
             sipTimer = Random.Range(minSipTime, maxSipTime);
+            fillableGlass = GameObject.FindGameObjectWithTag("Fillable").GetComponent<FillableGlass>();
+            noDrinkTimer = noDrinkTime;
+            orgRotation = transform.rotation;
+            audioSource = GetComponent<AudioSource>();
+            fillableGlass.isFilled += Interrupt;
         }
 
-        void Update()
+        protected override void Update()
         {
+            base.Update();
             if (isRunning)
             {
-
-                //is drink not empty?
-                sipTimer -= Time.deltaTime;
-                if (sipTimer <= 0)
+                if (!fillableGlass.isEmpty)
                 {
-                    SipDrink();
+                    sipTimer -= Time.deltaTime;
+                    if (sipTimer <= 0)
+                    {
+                        SipDrink();
+                        sipTimer = Random.Range(minSipTime, maxSipTime);
+                    }
                 }
-
-                //else if drink is empty
-                //Count down timer
-                //If timer reaches zero, run event
+                else
+                {
+                    noDrinkTimer -= Time.deltaTime;
+                    if (noDrinkTimer <= 0)
+                    {
+                        eventManager.PlayEvent(eventType);
+                        audioSource.Play();
+                        isTalking = true;
+                        noDrinkTimer = noDrinkTime;
+                        isRunning = false;
+                    }
+                }
             }
+            if (isTalking)
+            {
+                transform.rotation = Quaternion.Euler(new Vector3(orgRotation.x - 90, orgRotation.y, orgRotation.z));
+                if (!audioSource.isPlaying) Interrupt();
+            }
+            else transform.rotation = orgRotation;
+
         }
 
         public override void Activate()
@@ -47,11 +77,14 @@ namespace Assets.Scripts
         public override void Interrupt()
         {
             base.Interrupt();
+            audioSource.Pause();
+            isTalking = false;
         }
 
         private void SipDrink()
         {
-            //Take a drink
+            float asd = (Random.Range(minDrinkAmount, maxDrinkAmount)/100)*fillableGlass.maxContents;
+            fillableGlass.Empty(fillableGlass.maxContents * 2);
         }
     }
 }
