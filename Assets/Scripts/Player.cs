@@ -29,8 +29,7 @@ public class Player : MonoBehaviour {
 
 		if(Input.GetMouseButtonUp(0)) {
 			if(activeObject && activeObject.tag == "Throwable") {
-				FireObject(activeObject);
-				Debug.Log("Firing");
+				FireObject(activeObject); 
 			}
 		}
 
