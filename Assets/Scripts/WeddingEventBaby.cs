@@ -23,8 +23,8 @@ namespace Assets.Scripts
             audioSource = GetComponent<AudioSource>();
         }
 
-        void Update()
-        {
+        protected override void Update() {
+            base.Update();
             if (isRunning)
             {
                 cryTimer -= Time.deltaTime;
@@ -49,7 +49,7 @@ namespace Assets.Scripts
                 if (silenceTimer <= 0)
                 {
                     isRunning = false;
-                    eventManager.PlayEvent(eventType);
+                    //eventManager.PlayEvent(eventType);
                 }
             }
         }
@@ -66,6 +66,16 @@ namespace Assets.Scripts
         public override void Interrupt()
         {
             base.Interrupt();
+        }
+
+        void OnCollisionEnter(Collision col)
+        {
+            if (col.other.gameObject.tag == "Throwable")
+            {
+                Activate();
+                Debug.Log("BABYHIT");
+            }
+
         }
     }
 }

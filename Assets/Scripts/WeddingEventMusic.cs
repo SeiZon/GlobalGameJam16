@@ -22,24 +22,25 @@ namespace Assets.Scripts
             eventManager.SubscribeEvent(this);
             sideObjective = true;
             audioSource = GetComponent<AudioSource>();
+            Activate();
         }
 
-        void Update() {
+        protected override void Update() {
+            base.Update();
             if (isRunning)
             {
-                particles.gameObject.SetActive(true);
-                animator.enabled = true;
+                SetActive(true);
                 playTimer -= Time.deltaTime;
                 if (playTimer <= 0)
                 {
                     audioSource.Stop();
+                    SetActive(false);
                     silenceTimer = silenceTime;
                 }
             }
             else
             {
-                particles.gameObject.SetActive(false);
-                animator.enabled = false;
+                SetActive(false);
                 silenceTimer -= Time.deltaTime;
                 if (silenceTimer <= 0) {
                     isRunning = false;
@@ -52,12 +53,27 @@ namespace Assets.Scripts
         {
             base.Activate();
             Debug.Log("ACTIVATED Music!");
-            //DO STUFF
+            playTimer = Random.Range(minPlayTime, maxPlayTime);
+            audioSource.Play();
         }
 
         public override void Interrupt()
         {
             base.Interrupt();
+        }
+
+        void OnCollisionEnter(Collision col) {
+            if (col.other.gameObject.tag == "Throwable") {
+                Activate();
+            }
+
+        }
+
+        void SetActive(bool isActive)
+        {
+            animator.enabled = isActive;
+            particles.gameObject.SetActive(isActive);
+
         }
     }
 }

@@ -5,7 +5,8 @@ namespace Assets.Scripts
 {
     public class EventManager : MonoBehaviour
     {
-
+        [SerializeField] private float speechInterval = 30;
+        //[SerializeField] private OurClock.Clock clock;
 
         public delegate void EventToastmasterStart();
         public event EventToastmasterStart OnEventToastmasterStart;
@@ -28,7 +29,7 @@ namespace Assets.Scripts
         public event EventBrudgomInterrupt OnEventBrudgomInterrupt;
 
         private Dictionary<EventData.WeddingEventType, WeddingEvent> events = new Dictionary<EventData.WeddingEventType, WeddingEvent>();
-
+        private EventData.WeddingEventType currentlyRunningEvent;
 
         [HideInInspector]
         public float timeCounter;
@@ -37,52 +38,37 @@ namespace Assets.Scripts
 
         EventData eventData = EventData.Instance;
 
+        void Start()
+        {
+            timeCounter = speechInterval;
+        }
+
         void Update() {
-            timeCounter += Time.deltaTime;
+            timeCounter -= Time.deltaTime;
 
             foreach (KeyValuePair<EventData.WeddingEventType, bool> pair in eventData.eventsRunning)
             {
                 eventCurrentlyPlaying = pair.Value;
             }
 
-            foreach (int i in eventData.eventTimers)
+            
+            if (timeCounter <= 0)
             {
-                if (i < timeCounter)
-                {
-                    EventData.WeddingEventType currentWeddingEventType = eventData.eventTiming[i];
-
-                    if (events[currentWeddingEventType].hasBeenActivated)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        if (events[currentWeddingEventType].eventType == EventData.WeddingEventType.Brudgom)
-                        {
-                            OnEventBrudgomStart();
-                        }
-                        //events[currentWeddingEventType].Activate();
-                    }
+                if (eventData.availableMainEvents.Count == 0) return;
+                currentlyRunningEvent = eventData.availableMainEvents[Random.Range(0, eventData.availableMainEvents.Count-1)];
+                
+                if (events[currentlyRunningEvent].eventType == EventData.WeddingEventType.Brudgom) {
+                    OnEventBrudgomStart();
                 }
+                if (events[currentlyRunningEvent].eventType == EventData.WeddingEventType.Bestman) {
+                    OnEventBestmanStart();
+                }
+                if (events[currentlyRunningEvent].eventType == EventData.WeddingEventType.Svigerfar) {
+                    OnEventSvigerfarStart();
+                }
+                timeCounter = speechInterval;
             }
-            /*
-            if (Input.GetKeyUp(KeyCode.A))
-            {
-                OnEventBestmanInterrupt();
-            }
-            if (Input.GetKeyUp(KeyCode.S))
-            {
-                OnEventBrudgomInterrupt();
-            }
-            if (Input.GetKeyUp(KeyCode.D))
-            {
-                OnEventSvigerfarInterrupt();
-            }
-            if (Input.GetKeyUp(KeyCode.F))
-            {
-                OnEventToastmasterInterrupt();
-            }
-            */
+
         }
 
         public void InterruptEvent(EventData.InterruptAction interruptAction)
@@ -97,6 +83,7 @@ namespace Assets.Scripts
         public void PlayEvent(EventData.WeddingEventType eventType)
         {
             //Hook op til ting her
+            //clock.clockSpeed = 0;
         }
 
         public void SubscribeEvent(WeddingEvent weddingEvent)
@@ -104,6 +91,10 @@ namespace Assets.Scripts
             events.Add(weddingEvent.eventType, weddingEvent);
         }
 
+        public void RemoveEvent(EventData.WeddingEventType eventToRemove)
+        {
+            eventData.availableMainEvents.Remove(eventToRemove);
+        }
         
     }
 }
