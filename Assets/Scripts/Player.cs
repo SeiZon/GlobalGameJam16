@@ -9,10 +9,6 @@ public class Player : MonoBehaviour {
 	public CameraController cameraController;
 	private GameObject activeObject;
 
-	private float defaultForce = 100f;
-	private float forceCounter = 100f;
-	private float maximumForce = 4000f;
-
 	void Start () {
 		mainCamera = Camera.main;
 		cameraController.Init(transform, mainCamera.transform);
@@ -21,7 +17,6 @@ public class Player : MonoBehaviour {
 	void Update () {
 		cameraController.RotateCamera(transform, mainCamera.transform);
 
-		// If Right mouse button
 		if(Input.GetMouseButtonDown(1)) {
 			if (!activeObject) {
 				activeObject = GetFocusedObject();
@@ -31,18 +26,11 @@ public class Player : MonoBehaviour {
 				activeObject = null;
 			}
 		}
-		if(Input.GetMouseButton(0)) {
-			if(activeObject) {
-				if(forceCounter < maximumForce) {
-					forceCounter += 100f;
-				}
-			}
-		}
 
 		if(Input.GetMouseButtonUp(0)) {
 			if(activeObject && activeObject.tag == "Throwable") {
-				FireObject(activeObject, forceCounter);
-				forceCounter = defaultForce;
+				FireObject(activeObject);
+				Debug.Log("Firing");
 			}
 		}
 
@@ -66,15 +54,19 @@ public class Player : MonoBehaviour {
 
 	public void HoldObject() {
 		if(activeObject != null && activeObject.tag == "Throwable") {
-			activeObject.transform.position = cameraController.GetCenterRay().GetPoint(2.5f);
+			activeObject.transform.position = cameraController.GetCenterRay().GetPoint(1f);
+			activeObject.transform.rotation = mainCamera.transform.rotation;
 		}
 	}
 
-	public void FireObject(GameObject objectToFire, float forceMultiplier) {
-		Ray centerRay = cameraController.GetCenterRay();
+	public void FireObject(GameObject objectToFire) {
 		var rb = objectToFire.GetComponent<Rigidbody>();
 
-		rb.AddRelativeForce(centerRay.direction * forceMultiplier);
+		var direction = objectToFire.transform.forward;
+
+		var forceVector = direction * 2000f;
+		Debug.DrawRay(mainCamera.transform.position, forceVector, Color.blue, 10f);
+		rb.AddForce(forceVector, ForceMode.Force);
 		activeObject = null;
 	}
 
