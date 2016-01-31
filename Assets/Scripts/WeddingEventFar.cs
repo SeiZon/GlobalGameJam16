@@ -12,7 +12,6 @@ namespace Assets.Scripts
         [SerializeField] private float minDrinkAmount = 5;
         [SerializeField] private float maxDrinkAmount = 70;
         private FillableGlass fillableGlass;
-        [SerializeField] private Transform player;
         private Quaternion orgRotation;
         private bool isTalking = false;
         private AudioSource audioSource;
@@ -61,6 +60,7 @@ namespace Assets.Scripts
             if (isTalking)
             {
                 transform.rotation = Quaternion.Euler(new Vector3(orgRotation.x - 90, orgRotation.y, orgRotation.z));
+
                 if (!audioSource.isPlaying) Interrupt();
             }
             else transform.rotation = orgRotation;
