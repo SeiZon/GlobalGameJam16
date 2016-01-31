@@ -65,7 +65,7 @@ namespace Assets.Scripts
 
         private void SipDrink()
         {
-            fillableGlass.Empty((Random.Range(minDrinkAmount, maxDrinkAmount)/100) * 1.2f);
+			fillableGlass.Empty((Random.Range(minDrinkAmount, maxDrinkAmount)/100) * fillableGlass.maxContents);
         }
     }
 }
