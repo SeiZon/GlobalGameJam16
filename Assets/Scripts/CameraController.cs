@@ -5,7 +5,8 @@ using System.Collections;
 [Serializable]
 public class CameraController {
 
-	Camera camera;
+	Camera mainCamera;
+	Player player;
 	private Quaternion cameraRotation;
 	private Quaternion playerRotation;
 	private Vector2 cursorHotspot;
@@ -14,11 +15,34 @@ public class CameraController {
 	public float YSensitivity = 2.0f;
 	public Texture2D cursorTexture;
 
-	public void Init(Transform player, Transform camera) {
-		cameraRotation = camera.localRotation;
-		playerRotation = player.localRotation;
+	private bool cameraLock = false;
+
+	public void Init(Player player, Camera camera) {
+		this.mainCamera = camera;
+		this.player = player;
+		cameraRotation = mainCamera.transform.localRotation;
+		playerRotation = player.transform.localRotation;
 
 		InitCursor();
+	}
+
+	public void LockCameraTo(GameObject viewable) {
+		Debug.Log("Looking At: " + viewable);
+
+		// Some of these models are kinda fucked. Get the actual bounds instead of origin position
+		var collider = viewable.GetComponent<Collider>();
+		Vector3 topOfViewable = collider.bounds.center;
+		mainCamera.transform.LookAt(topOfViewable, Vector3.up);
+		cameraLock = true;
+
+		Debug.DrawRay (GetCenterRay().origin, mainCamera.transform.forward* 100f, Color.cyan, 100f);
+	}
+
+	public void ReleaseCamera() {
+		cameraLock = false;
+		// Reset old position
+		mainCamera.transform.localRotation = cameraRotation;
+		player.transform.localRotation = playerRotation;
 	}
 
 	public void InitCursor() {
@@ -29,21 +53,24 @@ public class CameraController {
 
 	public void RotateCamera(Transform player, Transform camera)
 	{
-		Cursor.lockState = CursorLockMode.Locked;
+		if(!cameraLock) {
+			Cursor.lockState = CursorLockMode.Locked;
 
-		float yRot = Input.GetAxis("Mouse X") * XSensitivity;
-		float xRot = Input.GetAxis("Mouse Y") * YSensitivity;
+			float yRot = Input.GetAxis("Mouse X") * XSensitivity;
+			float xRot = Input.GetAxis("Mouse Y") * YSensitivity;
 
-		cameraRotation *= Quaternion.Euler (-xRot, 0f, 0f);
-		cameraRotation = LimitVerticalRotation (cameraRotation);
+			cameraRotation *= Quaternion.Euler (-xRot, 0f, 0f);
+			cameraRotation = LimitVerticalRotation (cameraRotation);
 
-		playerRotation *= Quaternion.Euler (0f, yRot, 0f);
+			playerRotation *= Quaternion.Euler (0f, yRot, 0f);
 
-		camera.localRotation = cameraRotation;
-		player.localRotation = playerRotation;
+			camera.localRotation = cameraRotation;
+			player.localRotation = playerRotation;
 
-		RayCastCursorPosition();
-		Cursor.visible = true;
+			RayCastCursorPosition();
+			Cursor.visible = true;
+		}
+			
 	}
 
 	Quaternion LimitVerticalRotation(Quaternion q)
