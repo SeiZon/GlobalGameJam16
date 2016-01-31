@@ -47,7 +47,12 @@ namespace Assets.Scripts
 
         };
 
-        public Dictionary<int, WeddingEventType> eventTiming;
+        public List<WeddingEventType> availableMainEvents = new List<WeddingEventType>()
+        {
+            WeddingEventType.Bestman,
+            WeddingEventType.Brudgom,
+            WeddingEventType.Svigerfar
+        };
 
         public enum WeddingEventType
         {
@@ -69,27 +74,6 @@ namespace Assets.Scripts
             PourDrink,
             Waiter,
             Røgalarm
-        }
-
-        public EventData() {
-            eventTiming = new Dictionary<int, WeddingEventType>()
-            {
-                {eventTimers[0], WeddingEventType.Toastmaster },
-                {eventTimers[1], WeddingEventType.Brudgom },
-                {eventTimers[2], WeddingEventType.Svigerfar },
-                {eventTimers[3], WeddingEventType.Bestman }
-            };
-        }
-
-
-        public int[] eventTimers =
-        {
-            0, 10, 120, 180
-        };
-
-        public int GetEventTimer(WeddingEventType type)
-        {
-            return eventTimers[(int)type];
         }
 
         public void InterruptEvent(InterruptAction interruptActionDone)

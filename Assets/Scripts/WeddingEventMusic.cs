@@ -24,7 +24,8 @@ namespace Assets.Scripts
             audioSource = GetComponent<AudioSource>();
         }
 
-        void Update() {
+        protected override void Update() {
+            base.Update();
             if (isRunning)
             {
                 particles.gameObject.SetActive(true);
