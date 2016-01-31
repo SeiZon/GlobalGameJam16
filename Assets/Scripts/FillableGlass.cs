@@ -15,7 +15,7 @@ public class FillableGlass : MonoBehaviour
     public event IsFilled isFilled;
 
 	public void Start() {
-		maxContents = contentObject.transform.position.y;
+		maxContents = contentObject.transform.localPosition.y;
 		contents = maxContents;
 		minContents = -maxContents;
 
@@ -37,7 +37,8 @@ public class FillableGlass : MonoBehaviour
 		var delta = contents - oldContents;
 
 		Debug.Log("fillAmount, delta: " + fillAmount + ", " + delta);
-		contentObject.transform.Translate(new Vector3(0, delta, 0));
+//		contentObject.transform.Translate(new Vector3(0, delta, 0));
+		TranslatePosition(delta);
 	    isEmpty = false;
 	    if (isFilled != null) isFilled();
 	}
@@ -54,10 +55,18 @@ public class FillableGlass : MonoBehaviour
 			contents -= amount;
 		}
 
-		var delta = oldContents - contents;
+		var delta = contents - oldContents;
 
 		Debug.Log("amount: " + delta);
-		contentObject.transform.Translate(new Vector3(0, -delta, 0));
+		TranslatePosition(delta);
+//		contentObject.transform.Translate(new Vector3(0, -delta, 0));
+	}
+
+	public void TranslatePosition(float delta) {
+		var pos = contentObject.transform.localPosition;
+		pos.y = pos.y + delta;
+
+		contentObject.transform.localPosition = pos;
 	}
 }
 
