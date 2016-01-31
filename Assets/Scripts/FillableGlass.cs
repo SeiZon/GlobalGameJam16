@@ -2,17 +2,21 @@
 
 public class FillableGlass : MonoBehaviour
 {
-	float maxContents = 0.6f;
-	float minContents = -0.6f;
+	float contents = 0.6f;
+	float fillAmount = 1f;
 
-	public float contents = 0.6f;
 	public GameObject contentObject;
-	public float fillAmount = 1f;
     public bool isEmpty = false;
+	public float maxContents = 0.6f;
+	public float minContents = -0.6f;
 
 	public void Start() {
 		maxContents = contentObject.transform.position.y;
+		contents = maxContents;
 		minContents = -maxContents;
+
+		fillAmount = maxContents*2;
+
 		Debug.Log("Height: " + maxContents);
 		Debug.Log("Min: " + minContents);
 	}
@@ -25,7 +29,9 @@ public class FillableGlass : MonoBehaviour
 		} else {
 			contents += fillAmount;
 		}
+
 		var delta = contents - oldContents;
+
 		Debug.Log("fillAmount, delta: " + fillAmount + ", " + delta);
 		contentObject.transform.Translate(new Vector3(0, delta, 0));
 	    isEmpty = false;
