@@ -11,7 +11,7 @@ public class Player : MonoBehaviour {
 
 	void Start () {
 		mainCamera = Camera.main;
-		cameraController.Init(transform, mainCamera.transform);
+		cameraController.Init(this, mainCamera);
 	}
 
 	void Update () {
@@ -85,10 +85,9 @@ public class Player : MonoBehaviour {
 				switch(go.tag) {
 				case "Throwable":
 				case "Fillable":
+				default:
 					closestObject = go;
 					closestDistance = hit.distance;
-					break;
-				default:
 					break;
 				}
 			}
