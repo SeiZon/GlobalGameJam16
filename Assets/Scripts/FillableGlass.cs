@@ -10,6 +10,10 @@ public class FillableGlass : MonoBehaviour
 	public float maxContents = 0.6f;
 	public float minContents = -0.6f;
 
+    public delegate void IsFilled();
+
+    public event IsFilled isFilled;
+
 	public void Start() {
 		maxContents = contentObject.transform.position.y;
 		contents = maxContents;
@@ -35,6 +39,7 @@ public class FillableGlass : MonoBehaviour
 		Debug.Log("fillAmount, delta: " + fillAmount + ", " + delta);
 		contentObject.transform.Translate(new Vector3(0, delta, 0));
 	    isEmpty = false;
+	    if (isFilled != null) isFilled();
 	}
 
 
