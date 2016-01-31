@@ -22,7 +22,7 @@ namespace Assets.Scripts
             eventManager.SubscribeEvent(this);
             sideObjective = true;
             audioSource = GetComponent<AudioSource>();
-            Activate();
+            
         }
 
         protected override void Update() {
