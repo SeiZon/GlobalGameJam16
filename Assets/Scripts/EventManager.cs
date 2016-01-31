@@ -70,6 +70,10 @@ namespace Assets.Scripts
                 eventData.availableMainEvents.Remove(currentlyRunningEvent);
                 timeCounter = speechInterval;
             }
+            if (timeCounter > 360)
+            {
+                EndGame();
+            }
 
         }
 
@@ -96,6 +100,11 @@ namespace Assets.Scripts
         {
             eventData.availableMainEvents.Remove(eventToRemove);
         }
-        
+
+        public void EndGame()
+        {
+            Application.Quit();
+            
+        }
     }
 }
