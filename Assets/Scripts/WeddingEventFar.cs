@@ -24,8 +24,9 @@ namespace Assets.Scripts
             noDrinkTimer = noDrinkTime;
         }
 
-        void Update()
+        protected override void Update()
         {
+            base.Update();
             if (isRunning)
             {
                 if (!fillableGlass.isEmpty)
